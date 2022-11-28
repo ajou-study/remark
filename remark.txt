@@ -1,0 +1,194 @@
+우리가 주석을 쓰는 이유는?
+
+=> 유용한 정보를 제공해주기 위함 or 알아보기 쉽게 하기 위함
+
+좋은 주석, 나쁜 주석 설명에 앞서...
+
+"나쁜 코드에 주석을 달지 마라. 새로 짜라."
+
+=> 코드를 깔끔하게 정리하고 표현력을 강화하는 방향으로, 애초에 주석이 필요없는 방향으로 에너지를 쏟는 게 좋다.
+=> 부정확한 주석은 아예 없는 주석보다 훨씬 더 나쁘다!
+
+
+
+[좋은 주석]
+
+0. 코드로 의도를 표현해라!
+
+- 주석으로 의도를 표현한 코드
+//직원에게 복지 혜택을 받을 자격이 있는지 검사
+if((employee.flags & HOURY_FLAG) && (Employee.age>65))
+
+- 만약 코드로 의도를 표현한다면?
+if(employee.isEligibleForFullBenefits())
+
+=> 한눈에 파악 가능
+
+1. 정보를 제공하는 주석
+
+// 테스트 중인 Responder 인스턴스를 반환한다.
+protected abstract Responder responderInstance();
+
+2. 의도를 설명하는 주석
+
+3. 의미를 명료하게 밝히는 주석
+
+assertTrue(a.compareTo(a) == 0 ) // a == a
+assertTrue(a.compareTo(b) != 0   // a != b
+assertTrue(a.compareTo(c) == -1) // a < c
+
+4. 결과를 경고하는 주석
+
+@Ignore("여유 시간이 충분하지 않다면 실행하지 마세요.");
+public void testCode() {
+  ...
+}
+
+=> @Ignore 어노테이션을 통해 테스트 케이스를 off시킬 수 있다.
+
+5. TODO 주석
+앞으로 할 일을 //TODO로 남겨두면 편하다.
+
+//TODO-function 현재 필요하지 않다.
+//체크아웃 모델을 도입하면 함수가 필요없다.
+function makeVersion(): VersionInfo | null {
+  return null;
+}
+
+
+
+[나쁜 주석]
+보통 특별한 이유 없이 의무감으로 주석을 다는 경우에 나쁜 주석을 쓸 가능성이 잦다.
+
+1. 같은 이야기를 반복하는 주석
+
+// this.closed가 true일 때 반환되는 유틸리티 메소드다.
+// 타임아웃에 도달하면 예외를 던진다.
+public synchronized void waitForClose(final long timeoutMillis){
+	if(!closed){
+    		throw new Exception(""); 
+    	}
+}
+
+=> 여기에 있는 주석은 코드에 있는 내용을 그대로 가져왔기 때문에 그닥 도움이 되지 않는 주석이다.
+
+2. 의무적으로 다는 주석
+
+/**
+*
+* @param title CD 제목
+* @param author CD 저자
+* @param tracks CD 트랙 숫자 
+* @param durationInMinutes CD 길이(단위: 분)
+*/
+public void addCD(String title, String author, int tracks, int durationInMinutes){
+
+    Cd cd = new CD(); 
+    cd.title = title;
+    cd.author = author;
+    cd.tracks = tracks;
+    cd.durationInMinutes = durationInMinutes; 
+    cdList.add(cd); 
+}
+
+=> 굳이 주석을 달지 않아도 충분한 정보를 제공하는데, 의무감에 의해 주석을 달 경우 혼동이 생길 수 있다.
+
+3. 주석으로 처리한 코드
+
+가장 많이 발생하는 경우가 아닌가 싶다.
+주석으로 처리한 코드만큼 지저분한 주석도 없다.
+
+이유가 있어서 주석 처리했을 거란 생각에 보통 잘 지우지 않는 편인데, 소스 코드에 이런 주석 코드가 점점 쌓이면 정말 더러워진다.
+
+
+  // useEffect((e) => {
+  //   async function viewFavoritesData() {
+  //     const res = await axios.get(
+  //       `http://3.38.210.200:8080/myPage/like/${memberInfoId}`,
+  //       {
+  //         withCredentials: true,
+  //         headers: {
+  //           Authorization: `Bearer ${sessionStorage.getItem("user_token")}`,
+  //         },
+  //       }
+  //     );
+  //     const _favorData = await res.data.itemList.map((rowData) => ({
+  //       nft_item_id: rowData.nftItemId,
+  //       created_date: rowData.createdDate,
+  //       profileImg: rowData.profileImg,
+  //       memberId: rowData.memberId,
+  //       nickname: rowData.nickname,
+  //       nftItemImg: rowData.nftItemImg,
+  //       price: rowData.price,
+  //       likeCnt: rowData.likeCnt,
+  //       title: rowData.title,
+  //       view_cnt: rowData.viewCnt,
+  //       status: rowData.status,
+  //     }));
+  //     setFavorData(favorData.concat(_favorData));
+  //     console.log(_favorData);
+  //   }
+  //   viewFavoritesData();
+  // }, []);
+
+  => 실제로 프로젝트에서 코드를 주석으로 처리한 경우가 많다..
+
+4. 이력을 기록하는 주석
+
+예전에는 모든 모듈 첫 머리에 변경 이력을 작성하곤 했다고 한다.
+약간의 관례처럼.. 당시에는 소스 코드 관리 시스템이 없었으니까..
+
+하지만 이제는 혼란만 가중할 뿐이므로 완전히 제거하는 편이 좋다.
+
+아래는 변경 이력을 보여주는 주석이다.
+
+/**
+ * 변경 이력 (11-Oct-2001부터)
+ * --------------------------------
+ * 11-Oct-2001 : 클래스를 다시 정리하고 새로운 패키지인 com.jrefinery.date로 옮겼다 (DG);
+ * 05-Nov-2001 : getDescription() 메서드를 추가했으며 NotableDate class를 제거했다 (DG);
+ * 12-Nov-2001 : IBD가 setDescription() 메서드를 요구한다 NotableDate 클래스를 없앴다 (DG);
+ *               getFollowingDayOfWeek(), getNearestDayOfWeek()를 변경해 버그를 수정했다 (DG);
+ * 05-Dec-2001 : SpreadsheetDate 클래스에 존재하는 버그를 수정했다 (DG);
+ * 29-May-2002 : month 상수를 독자적인 인터페이스로 옮겼다 (MonthConstants) (DG);
+ */
+
+5. HTML 주석
+
+소스 코드에서 HTML 주석은 정말 더럽다.
+HTML 주석은 주석을 읽기 쉬워야 하는 편집기/IDE에서조차 읽기가 어렵다. 
+
+/**
+ * 적합성 테스트를 수행하기 위한 과업
+ * 이 과업은 적합성 테스트를 수행해 결과를 출력한다.
+ * <p/>
+ * <pre>
+ * 용법:
+ * &lt;taskdef name=&quot;execute-fitnesse-tests&quot; classname=&quot;fitnesse.ant.ExecuteFitnesseTestsTask&quot; classpathref=&quot;classpath&quot; /&gt;
+ * 또는
+ * &lt;taskdef classpathref=&quot;classpath&quot; resource=&quot;tasks.properties&quot; /&gt
+ * </p>
+ * ...
+ */
+
+ 6. 닫는 괄호에 쓰는 주석
+
+ 많은 프로그래머들은 아래와 같이 닫는 괄호에 특수한 주석을 달아놓을 떄가 있다. 닫는 괄호에 주석을 다는 것 대신 코드를 분리하여 줄이려는 시도를 하는 게 좋다.
+
+ func add(n1:Int,n2:Int,infos:[Int]) {
+    for info in infos {
+        if  n1 <  n2{
+            while infos.isEmpty {
+                
+            }//while
+        }//if
+    }//for
+}
+
+
+
+
+[느낀 점]
+
+내 프로젝트에도 나쁜 주석이 많다는 것을 알게 되었다...
+좋은 주석을 위해....끊임없이 노력해야겠다.
